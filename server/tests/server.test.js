@@ -4,12 +4,12 @@ const request=require('supertest');
 const {app}=require('./../server');
 const {Todo}=require('./../models/todo');
 
-beforeEach((done)=>{
+/*beforeEach((done)=>{
   Todo.remove({}).then(()=>done());
-})
+})*/
 
 describe('POST /todos',()=>{
-  it('it should create a new todo',(done)=>{
+/*  it('it should create a new todo',(done)=>{
     var text="Test todo text";
 
     request(app)
@@ -24,7 +24,7 @@ describe('POST /todos',()=>{
       {
         return done(err);
       }
-      Todo.find().then((todos)=>{
+      Todo.find({text}).then((todos)=>{
         expect(todos.length).toBe(1);
         expect(todos[0].text).toBe(text);
         done();
@@ -32,7 +32,7 @@ describe('POST /todos',()=>{
         done(e);
       })
     })
-  });
+  });*/
 
   it('should not create todo with invalid body data',(done)=>{
     request(app)
@@ -54,4 +54,17 @@ describe('POST /todos',()=>{
     })
   })
 
+})
+
+
+describe('Get /todos route',()=>{
+  it('should get all todos',(done)=>{
+    request(app)
+    .get('/todos')
+    .expect(200)
+    .expect((res)=>{
+      expect(res.body.todos.length).toBe(3);
+    })
+    .end(done);
+  })
 })
