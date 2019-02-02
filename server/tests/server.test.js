@@ -4,11 +4,20 @@ const request=require('supertest');
 const {app}=require('./../server');
 const {Todo}=require('./../models/todo');
 
-/*beforeEach((done)=>{
-  Todo.remove({}).then(()=>done());
-})*/
+const todos=[{
+  text:"1st text"
+},{
+  text:"2nd text"
+}]
+
+beforeEach((done)=>{
+  Todo.remove({}).then(()=>{
+    return Todo.insertMany(todos);
+  }).then(()=>done());
+});
 
 describe('POST /todos',()=>{
+  var text="1st text"
 /*  it('it should create a new todo',(done)=>{
     var text="Test todo text";
 
@@ -45,8 +54,8 @@ describe('POST /todos',()=>{
         return done(err);
       }
 
-      Todo.find().then((todos)=>{
-        expect(todos.length).toBe(0);
+      Todo.find({text}).then((todos)=>{
+        expect(todos.length).toBe(1);
         done();
       }).catch((e)=>{
         done(e);
@@ -63,7 +72,7 @@ describe('Get /todos route',()=>{
     .get('/todos')
     .expect(200)
     .expect((res)=>{
-      expect(res.body.todos.length).toBe(3);
+      expect(res.body.todos.length).toBe(2);
     })
     .end(done);
   })
